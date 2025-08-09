@@ -1,0 +1,6 @@
+/validation_report.json
+/model.pkl
+/scaler.pkl
+/X_test.csv
+/y_test.csv
+/best_params.json

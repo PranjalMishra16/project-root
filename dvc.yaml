@@ -1,0 +1,40 @@
+stages:
+  data_ingest:
+    cmd: python src/data_ingest.py
+    deps:
+      - src/data_ingest.py
+      - data/raw/telco_customer_churn.csv
+    outs:
+      - data/staged/data.csv
+
+  data_validation:
+    cmd: python src/data_validation.py
+    deps:
+      - src/data_validation.py
+      - data/staged/data.csv
+    outs:
+      - data/validation_report.json
+
+  train:
+    cmd: python src/train_and_tune.py
+    deps:
+      - src/train_and_tune.py
+      - data/staged/data.csv
+    outs:
+      - data/model.pkl
+      - data/scaler.pkl
+      - data/X_test.csv
+      - data/y_test.csv
+      - data/best_params.json
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - data/model.pkl
+      - data/scaler.pkl
+      - data/X_test.csv
+      - data/y_test.csv
+    metrics:
+      - data/metrics.json:
+          cache: false

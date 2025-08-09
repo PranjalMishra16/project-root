@@ -1,0 +1,25 @@
+{
+  "accuracy": 0.8005677785663591,
+  "precision": 0.6597938144329897,
+  "recall": 0.5133689839572193,
+  "f1": 0.5774436090225564,
+  "roc_auc": 0.8422046552481336,
+  "confusion_matrix": [
+    [
+      936,
+      99
+    ],
+    [
+      182,
+      192
+    ]
+  ],
+  "true_negatives": 936,
+  "false_positives": 99,
+  "false_negatives": 182,
+  "true_positives": 192,
+  "total_predictions": 1409,
+  "predicted_churn": 291,
+  "actual_churn": 374,
+  "churn_rate": 0.2654364797728886
+}
