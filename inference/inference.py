@@ -13,19 +13,17 @@ class ChurnPredictor:
         self.feature_names = X_test.columns.tolist()
     
     def preprocess(self, data):
-        """Preprocess input data to match training format"""
+
         df = pd.DataFrame([data])
         
-        # Handle TotalCharges
         df['totalcharges'] = pd.to_numeric(df['totalcharges'], errors='coerce')
         
-        # Binary encoding
+ 
         binary_cols = ['gender', 'partner', 'dependents', 'phoneservice', 'paperlessbilling']
         for col in binary_cols:
             if col in df.columns:
                 df[col] = df[col].map({'Yes': 1, 'No': 0, 'Male': 1, 'Female': 0})
         
-        # One-hot encoding
         cat_cols = ['multiplelines', 'internetservice', 'onlinesecurity',
                     'onlinebackup', 'deviceprotection', 'techsupport',
                     'streamingtv', 'streamingmovies', 'contract', 'paymentmethod']
@@ -43,8 +41,6 @@ class ChurnPredictor:
         return df
     
     def predict(self, customer_data):
-        """Make churn prediction for a customer"""
-        # Preprocess
         features = self.preprocess(customer_data)
         
         # Scale
@@ -60,7 +56,6 @@ class ChurnPredictor:
             'retention_probability': float(probability[0])
         }
 
-# Example usage
 if __name__ == "__main__":
     print("🔮 Testing Churn Prediction...")
     
@@ -96,7 +91,7 @@ if __name__ == "__main__":
     print(f"   Churn Probability: {result['churn_probability']:.2%}")
     print(f"   Retention Probability: {result['retention_probability']:.2%}")
     
-    # Test another customer (likely to stay)
+    # customer (likely to stay)
     loyal_customer = {
         'gender': 'Female',
         'seniorcitizen': 0,
@@ -121,9 +116,9 @@ if __name__ == "__main__":
     
     result2 = predictor.predict(loyal_customer)
     
-    print("\n📊 Loyal Customer Prediction:")
+    print("\n Loyal Customer Prediction:")
     print(f"   Churn Prediction: {result2['churn_prediction']}")
     print(f"   Churn Probability: {result2['churn_probability']:.2%}")
     print(f"   Retention Probability: {result2['retention_probability']:.2%}")
     
-    print("\n✅ Inference test complete!")
+    print("\n Inference test complete!")

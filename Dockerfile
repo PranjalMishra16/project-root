@@ -2,11 +2,13 @@ FROM python:3.9-slim
 
 WORKDIR /app
 
-# Copy everything to the container
+# Copy everything
 COPY . .
 
-# Install Python packages
-RUN pip install pandas numpy scikit-learn joblib
+# Install dependencies
+RUN pip install pandas numpy scikit-learn joblib scipy
 
-# Run the inference test
+# Verify files exist in container
+RUN ls -la data/
+
 CMD ["python", "inference/inference.py"]

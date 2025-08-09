@@ -21,19 +21,18 @@ MODEL_PATH = "data/model.pkl"
 SCALER_PATH = "data/scaler.pkl"
 
 def evaluate():
-    """Evaluate the trained model"""
     
     # Check if required files exist
     if not Path(MODEL_PATH).exists():
-        print("❌ Model not found! Run train_and_tune.py first")
+        print("Model not found! Run train_and_tune.py first")
         return None
     
     if not Path(SCALER_PATH).exists():
-        print("❌ Scaler not found! Run train_and_tune.py first")
+        print("❌caler not found! Run train_and_tune.py first")
         return None
     
     if not Path('data/X_test.csv').exists() or not Path('data/y_test.csv').exists():
-        print("❌ Test data not found! Run train_and_tune.py first")
+        print("est data not found! Run train_and_tune.py first")
         return None
     
     # Load model and test data
@@ -68,8 +67,8 @@ def evaluate():
     metrics['false_positives'] = int(cm[0, 1])
     metrics['false_negatives'] = int(cm[1, 0])
     metrics['true_positives'] = int(cm[1, 1])
-    
-    # Calculate additional metrics
+
+
     total_predictions = len(y_test)
     metrics['total_predictions'] = total_predictions
     metrics['predicted_churn'] = int(sum(y_pred))

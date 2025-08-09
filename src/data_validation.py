@@ -20,11 +20,9 @@ def validate_data():
         'paymentmethod', 'monthlycharges', 'totalcharges', 'churn'
     ]
     
-    # Convert numpy types to Python native types for JSON serialization
     missing_values = df.isnull().sum()
     missing_dict = {str(k): int(v) for k, v in missing_values.items() if v > 0}
     
-    # Basic validations
     validation_results = {
         'n_records': int(len(df)),
         'n_features': int(len(df.columns)),
@@ -33,7 +31,6 @@ def validate_data():
         'schema_valid': set(df.columns) == set(expected_columns)
     }
     
-    # Check TotalCharges (often has issues)
     if df['totalcharges'].dtype == 'object':
         logger.warning("TotalCharges is object type - needs conversion in feature engineering")
         validation_results['totalcharges_type'] = 'object - needs fixing'
@@ -45,10 +42,9 @@ def validate_data():
             str(k): int(v) for k, v in churn_dist.items()
         }
     
-    # Log results
+    #results
     logger.info(f"Validation Results: {validation_results}")
     
-    # Save validation report
     with open('data/validation_report.json', 'w') as f:
         json.dump(validation_results, f, indent=2)
     

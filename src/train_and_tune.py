@@ -16,32 +16,26 @@ MODEL_PATH = "data/model.pkl"
 SCALER_PATH = "data/scaler.pkl"
 
 def prepare_features(df):
-    """Prepare features for training"""
-    # Handle TotalCharges - fixed the warning
     if 'totalcharges' in df.columns:
         df['totalcharges'] = df['totalcharges'].replace(' ', np.nan)
         df['totalcharges'] = pd.to_numeric(df['totalcharges'], errors='coerce')
-        # Fixed: use loc instead of chained assignment
         df.loc[:, 'totalcharges'] = df['totalcharges'].fillna(df['totalcharges'].median())
     
     
     # Drop customerID
     if 'customerid' in df.columns:
         df = df.drop('customerid', axis=1)
-    
-    # Encode binary columns
+ 
     binary_cols = ['gender', 'partner', 'dependents', 'phoneservice', 
                    'paperlessbilling', 'churn']
     for col in binary_cols:
         if col in df.columns:
             df[col] = df[col].map({'Yes': 1, 'No': 0, 'Male': 1, 'Female': 0})
     
-    # One-hot encode categorical columns
     cat_cols = ['multiplelines', 'internetservice', 'onlinesecurity',
                 'onlinebackup', 'deviceprotection', 'techsupport',
                 'streamingtv', 'streamingmovies', 'contract', 'paymentmethod']
     
-    # Only encode columns that exist
     cat_cols = [col for col in cat_cols if col in df.columns]
     
     df = pd.get_dummies(df, columns=cat_cols, drop_first=True)
@@ -69,7 +63,6 @@ def train_and_tune():
     X_train_scaled = scaler.fit_transform(X_train)
     X_test_scaled = scaler.transform(X_test)
     
-    # Hyperparameter tuning (smaller grid for faster training)
     param_grid = {
         'n_estimators': [50, 100],
         'max_depth': [10, 20],
@@ -85,8 +78,7 @@ def train_and_tune():
     grid_search.fit(X_train_scaled, y_train)
     
     best_model = grid_search.best_estimator_
-    
-    # Create data directory if it doesn't exist
+
     Path("data").mkdir(exist_ok=True)
     
     # Save model and scaler
@@ -97,7 +89,6 @@ def train_and_tune():
     X_test.to_csv('data/X_test.csv', index=False)
     y_test.to_csv('data/y_test.csv', index=False)
     
-    # Save best parameters (convert numpy types to Python types)
     best_params_clean = {
         k: int(v) if isinstance(v, (np.integer, np.int64)) else v 
         for k, v in grid_search.best_params_.items()
@@ -106,7 +97,7 @@ def train_and_tune():
     with open('data/best_params.json', 'w') as f:
         json.dump(best_params_clean, f, indent=2)
     
-    print(f"✅ Training complete!")
+    print(f"Training complete!")
     print(f"   Best CV Score: {grid_search.best_score_:.4f}")
     print(f"   Best Params: {best_params_clean}")
     
