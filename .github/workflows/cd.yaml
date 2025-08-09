@@ -1,0 +1,34 @@
+name: CD Pipeline
+
+on:
+  push:
+    branches: [ master, main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Install DVC
+      run: |
+        pip install dvc[s3]
+        dvc remote modify --local awsremote access_key_id test
+        dvc remote modify --local awsremote secret_access_key test
+        echo "DVC installed ✅"
+    
+    - name: Build Docker
+      run: |
+        docker build -t project-root .
+        echo "Docker built ✅"
+    
+    - name: Test Docker
+      run: |
+        docker run project-root
+        echo "Docker test passed ✅"
