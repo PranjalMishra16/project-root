@@ -33,9 +33,16 @@ jobs:
         echo "def test_pass(): assert True" > tests/test_basic.py
         pip install pytest
         pytest tests/
-    
-    - name: Sanity training check
+
+    - name: Sanity Training Check
       run: |
-        python -c "import pandas; import sklearn; print('Imports work ✅')"
-        ls -la src/
-        echo "CI Pipeline completed! ✅"
+        echo "Running sanity training..."
+        python -c "
+        from sklearn.ensemble import RandomForestClassifier
+        import numpy as np
+        X = np.random.rand(50, 5)
+        y = np.random.randint(0, 2, 50)
+        model = RandomForestClassifier(n_estimators=5)
+        model.fit(X, y)
+        print('✅ Sanity training passed!')
+        "
