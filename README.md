@@ -21,24 +21,24 @@ bash# Run complete pipeline
 dvc repro
 
 # Or run individual stages
-python src/data_ingest.py
-python src/data_validation.py
-python src/train_and_tune.py
-python src/evaluate.py
+-python src/data_ingest.py
+-python src/data_validation.py
+-python src/train_and_tune.py
+-python src/evaluate.py
 
 Check Metrics
-bashdvc metrics show
-cat data/metrics.json
+-bashdvc metrics show
+-cat data/metrics.json
 Test Inference
-bashpython inference/inference.py
+-bashpython inference/inference.py
 🐳 Docker
 Build Image
-bashdocker build -t project-root .
+-bashdocker build -t project-root .
 Run Container
-bashdocker run project-root
+-bashdocker run project-root
 Start Monitoring Stack
-bash# Start Prometheus & Grafana
-docker-compose up -d
+-bash# Start Prometheus & Grafana
+-docker-compose up -d
 
 # Access services
 # Prometheus: http://localhost:9090
